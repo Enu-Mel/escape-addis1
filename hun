@@ -1,0 +1,109 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Operation: Escape Addis</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#12072d;color:#fff;overflow-x:hidden}
+.page{display:none;min-height:100vh;padding:24px;place-items:center;text-align:center;background:radial-gradient(circle at 20% 10%,#7c3aed55,transparent 35%),radial-gradient(circle at 80% 80%,#ec489955,transparent 35%),#12072d}.page.active{display:grid}
+.box{width:min(720px,100%);background:#ffffff12;border:1px solid #ffffff25;border-radius:30px;padding:clamp(24px,6vw,54px);box-shadow:0 25px 80px #0008}
+.emoji{font-size:clamp(50px,12vw,92px)}h1{font-size:clamp(38px,9vw,68px);line-height:.95;margin:12px 0}h2{font-size:clamp(28px,6vw,44px)}p{font-size:18px;line-height:1.55}
+.date{color:#fde68a;font-size:27px;font-weight:900}.pill{display:inline-block;padding:7px 13px;border-radius:99px;background:#ffffff18;font-weight:800;font-size:13px;letter-spacing:.12em}
+.list{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left;margin:24px 0}.item{background:#ffffff12;padding:13px;border-radius:14px}
+.buttons{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:14px;margin-top:24px}
+button{border:0;border-radius:18px;padding:15px 20px;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 9px 25px #0004;transition:transform .15s}
+.next,.yes{background:#22c55e;color:#fff}.maybe{background:#fbbf24;color:#241500}.back{background:#ffffff18;color:#fff}
+.msg{margin-top:22px;min-height:72px;font-size:18px;font-weight:750}
+.dots{position:fixed;bottom:18px;left:0;right:0;text-align:center;pointer-events:none}.dot{display:inline-block;width:9px;height:9px;background:#ffffff44;border-radius:50%;margin:4px}.dot.on{background:#fff;transform:scale(1.3)}
+.confetti{position:fixed;font-size:28px;z-index:80;pointer-events:none;animation:fall 1.7s ease-out forwards}@keyframes fall{to{transform:translate(var(--x),var(--y)) rotate(540deg);opacity:0}}
+
+/* ---------- the NOPE creature ---------- */
+.runner{background:none!important;box-shadow:none;padding:0 0 30px;display:inline-flex;flex-direction:column;align-items:center;position:relative;color:#fff;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.runner .head{font-size:44px;line-height:1;display:block;filter:drop-shadow(0 4px 6px #0006)}
+.runner .sign{background:#fb7185;padding:10px 16px;border-radius:16px;margin-top:-6px;white-space:nowrap;box-shadow:0 8px 20px #0005;position:relative}
+.runner .sign::before,.runner .sign::after{content:"";position:absolute;top:14px;width:16px;height:5px;background:#fde68a;border-radius:4px}
+.runner .sign::before{left:-13px;transform:rotate(25deg)}.runner .sign::after{right:-13px;transform:rotate(-25deg)}
+.legs{position:absolute;bottom:2px;display:flex;gap:16px}
+.leg{width:6px;height:28px;background:#fde68a;border-radius:4px;transform-origin:top center;position:relative}
+.leg::after{content:"";position:absolute;bottom:-3px;left:-2px;width:15px;height:7px;background:#f97316;border-radius:6px 9px 4px 4px}
+.runner:not(.walk):not(.dead) .leg.l{animation:tap 1s infinite}
+.runner.walk .leg.l{animation:stepA .18s infinite alternate}.runner.walk .leg.r{animation:stepB .18s infinite alternate}
+.runner.walk .head{animation:bob .18s infinite alternate}.runner.walk .sign{animation:bob .18s infinite alternate-reverse}
+.runner.flip .head{transform:scaleX(-1)}
+@keyframes stepA{from{transform:rotate(38deg)}to{transform:rotate(-38deg)}}@keyframes stepB{from{transform:rotate(-38deg)}to{transform:rotate(38deg)}}
+@keyframes bob{to{translate:0 -5px}}@keyframes tap{50%{transform:rotate(-20deg)}}
+.runner.loose{position:fixed;z-index:50;margin:0}
+.runner.tired .sign{background:#a78bfa}.runner.tired .leg{height:18px}
+.runner.dead{rotate:85deg;transition:rotate .5s}
+.bubble{position:absolute;bottom:100%;left:50%;translate:-50% -6px;background:#fff;color:#1f1147;font-size:13px;font-weight:800;padding:6px 10px;border-radius:12px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
+.bubble.show{opacity:1}
+
+/* ---------- old-times scroll ---------- */
+.maybe.rolling{animation:roll .45s forwards}@keyframes roll{to{transform:rotate(360deg) scale(0);opacity:0}}
+.scrollwrap{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:70;padding:16px}.scrollwrap[hidden]{display:none}
+.scroll{width:min(540px,100%)}
+.rod{height:24px;border-radius:12px;background:linear-gradient(#6b3f1d,#d4a373 45%,#6b3f1d);position:relative;box-shadow:0 6px 14px #0007}
+.rod::before,.rod::after{content:"";position:absolute;top:-4px;width:20px;height:32px;border-radius:9px;background:#4a2a12}.rod::before{left:-10px}.rod::after{right:-10px}
+.paper{margin:0 14px;background:linear-gradient(90deg,#d9bf86,#f8ecc9 12%,#f8ecc9 88%,#d9bf86);color:#4a2c0a;font-family:Georgia,"Times New Roman",serif;max-height:0;overflow:hidden;padding:0 24px;transition:max-height 1.3s ease,padding 1.3s ease;text-align:left}
+.scrollwrap.open .paper{max-height:72vh;overflow-y:auto;padding:22px 24px}
+.paper h3{text-align:center;font-size:26px;margin:0 0 6px}.paper .sub{text-align:center;font-style:italic;font-size:15px;margin:0 0 12px}
+.paper ol{padding-left:24px;margin:0}.paper li{margin:9px 0;font-size:16px;line-height:1.4;opacity:0;transform:scale(.2) rotate(-8deg);transition:.4s cubic-bezier(.3,1.7,.5,1)}.paper li.show{opacity:1;transform:none}
+.paper .seal{text-align:center;font-size:42px;margin:10px 0 0}
+.paper .buttons{margin-top:12px}.paper button{font-family:system-ui,sans-serif;font-size:14px;padding:12px 16px}.paper .back{background:#7c4a1e}
+@media(max-width:560px){.list{grid-template-columns:1fr}.box{padding:25px 17px}}
+</style></head><body>
+
+<section class="page active" id="p1"><div class="box"><div class="emoji">🚨🧳</div><span class="pill">TOP SECRET MISSION</span><h1>OPERATION:<br>ESCAPE ADDIS</h1><p>Dear Hanan Tesfaye Nigatu, this is not a normal invitation. This is an <b>intervention.</b> After careful scientific research (me being bored), I have diagnosed us with a dangerous lack of adventure.</p><p>Prescription: <b>one unnecessary trip, questionable drinks, and unlimited fun.</b> 🍹😂</p><div class="date">📅 February 22–26</div><div class="buttons"><button class="next" onclick="go(2)">Open the classified plan 🔓</button></div></div></section>
+
+<section class="page" id="p2"><div class="box"><div class="emoji">🧪🍹📸</div><span class="pill">YOUR TREATMENT PLAN</span><h2>Possible side effects</h2><p>Participation may cause a temporary inability to behave responsibly.</p><div class="list"><div class="item">🍹 Questionable drinks</div><div class="item">😂 Dangerous levels of laughter</div><div class="item">📸 96 photos, 3 usable</div><div class="item">🗺️ At least one “are we lost?”</div><div class="item">💸 Money mysteriously disappearing</div><div class="item">🤫 Stories classified until retirement</div></div><p><b>Doctor's note:</b> Staying home may cause extreme FOMO and seeing my photos later while regretting your choices.</p><div class="buttons"><button class="back" onclick="go(1)">← Wait, what?</button><button class="next" onclick="go(3)">I accept the risk 😎 →</button></div></div></section>
+
+<section class="page" id="p3"><div class="box"><div class="emoji">👀✈️</div><span class="pill">FINAL DECISION</span><h2>So... are you coming?</h2><p>Choose carefully. The friendship committee is watching.</p>
+<div class="buttons"><button class="yes" id="yes">LET'S GOOOO 🚀</button><button class="maybe" id="maybe">Convince me 😏</button>
+<button class="runner" id="no" aria-label="Nope"><span class="bubble" id="bubble"></span><span class="head" id="face">😏</span><span class="sign" id="noText">Nope 🏠</span><span class="legs"><i class="leg l"></i><i class="leg r"></i></span></button></div>
+<div class="msg" id="msg" aria-live="polite">There is definitely a correct answer. 👁️👁️</div><div class="buttons"><button class="back" onclick="go(2)">← Review the evidence</button></div></div></section>
+
+<div class="scrollwrap" id="scrollWrap" hidden><div class="scroll"><div class="rod"></div><div class="paper"><h3>📜 Royal Decree of Fun</h3><p class="sub">Hear ye, hear ye! By order of the Court of Bestie, the following cases are presented for February 22–26:</p><ol id="cases"></ol><div class="seal" id="seal" style="opacity:0">🔴👑</div><div class="buttons"><button class="yes" id="convinced">I am convinced 🙇‍♀️</button><button class="back" id="closeScroll">Roll it back up</button></div></div><div class="rod"></div></div></div>
+
+<div class="dots"><i class="dot on"></i><i class="dot"></i><i class="dot"></i></div>
+<script>
+const pages=[...document.querySelectorAll('.page')],dots=[...document.querySelectorAll('.dot')];
+const no=document.querySelector('#no'),face=document.querySelector('#face'),noText=document.querySelector('#noText'),bubble=document.querySelector('#bubble'),msg=document.querySelector('#msg');
+let current=1;
+function go(n){current=n;pages.forEach((p,i)=>p.classList.toggle('active',i===n-1));dots.forEach((d,i)=>d.classList.toggle('on',i===n-1));if(no.classList.contains('loose'))no.style.display=n===3?'':'none';scrollTo(0,0)}
+
+/* ---- NOPE creature ---- */
+const MAX=18;let tries=0,walking=false,done=false;
+const faces=['😏','😜','🤪','😝','😈','🙃','😎','🤭','🏃','😤','🥸','😵‍💫','🤡','😱','🥵','😭','🫠','😮‍💨'];
+const labels=['Nope 🏠','Catch me 😜','Too slow!','Nope nope nope','Can\'t touch this','Bye 👋','Over here!','Missed again 😂','I run daily','Not today!','Disguised 🥸','Dizzy...','Clown move 🤡','STILL?!','I\'m sweating','Please stop 😭','Melting...','Fine... 😮‍💨'];
+const lines=['🤨 Your finger slipped. Try again.','😂 Nope has declined your Nope.','🚨 Responsible behavior detected. Deploying legs...','🧑‍⚖️ The Trip Committee says your appeal has no merit.','🍹 Remember the questionable drinks. Reconsider.','😭 HOME? In this economy?!','🧳 Your suitcase already said yes, actually.','🏃 This button does cardio. You do not.','😤 It is running away from your bad decisions.','🙈 Even the button is embarrassed for you.','🥸 It\'s in disguise now. That\'s how much it doesn\'t want to be clicked.','💫 You made it dizzy. Proud of yourself?','🤡 At this point, who is the clown here?','📢 Breaking news: local friend chases button instead of packing.','🥵 You two have now run a full marathon.','😭 The button is begging. Please. Just click YES.','🫠 It is melting from the pressure...','😮‍💨 Fine. It surrenders. Click it if you dare.'];
+const quips=['nope!','hehe','bye!','too slow','zoom!','catch me','👋','not today','wheee'];
+let cx=0,cy=0;
+function free(){if(no.classList.contains('loose'))return;const r=no.getBoundingClientRect();document.body.appendChild(no);no.classList.add('loose');no.style.left=r.left+'px';no.style.top=r.top+'px';cx=r.left;cy=r.top;no.offsetWidth}
+function dodge(){
+  if(done||walking||tries>=MAX||current!==3)return;
+  free();const w=no.offsetWidth,h=no.offsetHeight;let x,y,g=0;
+  do{x=8+Math.random()*Math.max(10,innerWidth-w-16);y=8+Math.random()*Math.max(10,innerHeight-h-16)}while(Math.hypot(x-cx,y-cy)<180&&g++<25);
+  no.classList.toggle('flip',x<cx);
+  const speed=tries>12?0.9:0.45+Math.random()*0.35;
+  no.style.transition=`left ${speed}s ease-in-out, top ${speed}s ease-in-out`;
+  no.classList.add('walk');walking=true;no.style.left=x+'px';no.style.top=y+'px';cx=x;cy=y;
+  face.textContent=faces[tries];noText.textContent=labels[tries];msg.textContent=lines[tries];
+  bubble.textContent=quips[tries%quips.length];bubble.classList.add('show');
+  tries++;
+  setTimeout(()=>{no.classList.remove('walk');walking=false;bubble.classList.remove('show');if(tries>=MAX){no.classList.add('tired');face.textContent='😮‍💨';bubble.textContent='I give up...';bubble.classList.add('show')}},speed*1000);
+}
+no.addEventListener('pointerenter',()=>{if(matchMedia('(hover:hover)').matches)dodge()});
+no.addEventListener('pointerdown',e=>{if(tries<MAX&&!done){e.preventDefault();dodge()}});
+document.addEventListener('pointermove',e=>{if(!matchMedia('(hover:hover)').matches||tries>=MAX||done)return;const r=no.getBoundingClientRect();if(Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))<95)dodge()});
+addEventListener('resize',()=>{if(no.classList.contains('loose')){cx=Math.min(cx,innerWidth-no.offsetWidth-8);cy=Math.min(cy,innerHeight-no.offsetHeight-8);no.style.left=cx+'px';no.style.top=cy+'px'}});
+no.addEventListener('click',()=>{if(tries<MAX||done)return;done=true;no.classList.add('dead');face.textContent='😵';noText.textContent='RIP Nope';bubble.textContent='tell my legs I loved them';msg.innerHTML='🗑️ <b>APPLICATION DENIED.</b><br>You chased a button across the entire page just to say no, and it fainted. 😂 Your request has been thrown in the trash. See you February 22. 🧳'});
+
+/* ---- old-times scroll ---- */
+const cases=['🍹 Case #1: The drinks are questionable. You are questionable. A perfect match.','📸 Case #2: Who else will take 96 photos of me until one is acceptable?','😂 Case #3: Laughter is cheaper than therapy. Mostly.','🧳 Case #4: Your suitcase is crying in the corner. Unused. Abandoned.','💼 Case #5: Work will still exist when we come back. Sadly.','🗺️ Case #6: Someone has to blame me when we get lost.','🎵 Case #7: The car playlist needs a second terrible singer.','🍟 Case #8: Snacks taste 300% better on a road trip. Science.','👵 Case #9: Future you will tell grandkids about this trip. Don\'t disappoint them.','🛋️ Case #10: Your couch already knows you too well. It needs space.','📵 Case #11: Five days of FOMO is a real medical condition (I decided).','💖 Case #12: Because it\'s ME. Obviously. Case closed.'];
+const wrap=document.querySelector('#scrollWrap'),list=document.querySelector('#cases'),seal=document.querySelector('#seal'),maybe=document.querySelector('#maybe');let timers=[];
+maybe.addEventListener('click',()=>{maybe.classList.add('rolling');setTimeout(()=>{wrap.hidden=false;list.innerHTML='';seal.style.opacity=0;requestAnimationFrame(()=>requestAnimationFrame(()=>wrap.classList.add('open')));cases.forEach((c,i)=>{timers.push(setTimeout(()=>{const li=document.createElement('li');li.textContent=c;list.appendChild(li);requestAnimationFrame(()=>li.classList.add('show'));li.scrollIntoView({block:'nearest',behavior:'smooth'})},1100+i*420))});timers.push(setTimeout(()=>{seal.style.transition='.5s';seal.style.opacity=1},1100+cases.length*420))},430)});
+function closeScroll(){timers.forEach(clearTimeout);timers=[];wrap.classList.remove('open');setTimeout(()=>{wrap.hidden=true;maybe.classList.remove('rolling')},700)}
+document.querySelector('#closeScroll').onclick=()=>{closeScroll();msg.textContent='📜 You rolled up the decree... but the evidence remains. 👀'};
+document.querySelector('#convinced').onclick=()=>{closeScroll();setTimeout(celebrate,500)};
+
+/* ---- YES ---- */
+function celebrate(){msg.innerHTML='🎉 <b>CORRECT ANSWER!</b><br>February 22–26 is officially reserved for chaos, questionable drinks and stories we will deny later. PACK YOUR BAG! 🧳';
+  if(!done){face.textContent='🥲';noText.textContent='ok I\'ll come too';}
+  for(let i=0;i<30;i++){const s=document.createElement('span');s.className='confetti';s.textContent=['🎉','✨','🍹','😂','✈️'][i%5];s.style.left=(40+Math.random()*20)+'%';s.style.top='45%';s.style.setProperty('--x',(Math.random()*600-300)+'px');s.style.setProperty('--y',(Math.random()*500-150)+'px');document.body.appendChild(s);setTimeout(()=>s.remove(),1800)}}
+document.querySelector('#yes').onclick=celebrate;
+</script></body></html>
